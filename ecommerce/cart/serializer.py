@@ -1,6 +1,6 @@
-from cart.models import Cart
+from cart.models import Cart, Wishlist
 from rest_framework import serializers
-from product.serializer import VariantProductSerializer
+from product.serializer import VariantProductSerializer, ProductSerializer2, ProductSerializer
 
 class CartSerializer(serializers.ModelSerializer):
     variant = VariantProductSerializer(read_only=True)
@@ -16,4 +16,18 @@ class CartModificationSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
 
+        return super().save(**kwargs)
+    
+class WishlistSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    class Meta:
+        model = Wishlist
+        fields = ['product']
+
+class WishlistModificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Wishlist
+        fields = '__all__'
+
+    def save(self, **kwargs):
         return super().save(**kwargs)
